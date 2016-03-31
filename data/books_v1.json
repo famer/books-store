@@ -2,7 +2,8 @@
     "swagger": "2.0",
     "info": {
         "version": "0.9.7",
-        "title": "Books Storage API"
+        "title": "Books Storage API",
+	"description": "Please note that at the this demo page requests are not made to any actual service. If you want to test API live via Swagger, build and run project in repository and navigate to http://localhost:8083/ after."
     },
     "basePath": "/v1",
     "schemes": [
