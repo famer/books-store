@@ -1,0 +1,482 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.9.7",
+        "title": "Books Storage API"
+    },
+    "basePath": "/v1",
+    "schemes": [
+        "http"
+    ],
+    "tags": [
+        {
+            "name": "books",
+            "description": "Book related API CRUD"
+        },
+        {
+            "name": "search",
+            "description": "API for search of Books"
+        }
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "parameters": {
+        "book-id": {
+            "name": "book-id",
+            "in": "path",
+            "description": "The Book identifier number",
+            "type": "number",
+            "required": true
+        }
+    },
+    "paths": {
+        "/books/{book-id}": {
+            "get": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Gets particular Book object",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/book-id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/Book"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Replace existing Book in database",
+                "parameters": [
+                    {
+                        "name": "Book",
+                        "in": "body",
+                        "description": "The Book JSON you want to post",
+                        "schema": {
+                            "$ref": "#/definitions/Book"
+                        },
+                        "required": true
+                    },
+                    {
+                        "$ref": "#/parameters/book-id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Edit existing Book"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Modify existing Book in a database.",
+                "description": "Only fields needed to be modified must be provided",
+                "parameters": [
+                    {
+                        "name": "Book",
+                        "in": "body",
+                        "description": "The Book JSON you want to post",
+                        "schema": {
+                            "$ref": "#/definitions/Book"
+                        },
+                        "required": true
+                    },
+                    {
+                        "$ref": "#/parameters/book-id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Patch existing Book"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Deletes particular Book object from the database",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/book-id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/books": {
+            "get": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Lists existing Books.",
+                "description": "Gets `Book` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+                "parameters": [
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "description": "Size of array",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting field and sorting direction [asc|desc], comma(,) separated. (Example: title,desc)",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "title": "ArrayOfBooks",
+                            "type": "array",
+                            "items": {
+                                "title": "Book",
+                                "$ref": "#/definitions/Book"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Creates new Book in a database.",
+                "parameters": [
+                    {
+                        "name": "Book",
+                        "in": "body",
+                        "description": "The Book JSON you want to post",
+                        "schema": {
+                            "$ref": "#/definitions/Book"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Make a new Book"
+                    }
+                }
+            }
+        },
+        "/books/search/findByTitle": {
+            "get": {
+                "tags": [
+                    "books",
+                    "search"
+                ],
+                "summary": "Search of Books by title.",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "Title of the Book.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "title": "ArrayOfBooks",
+                            "type": "array",
+                            "items": {
+                                "title": "Book",
+                                "$ref": "#/definitions/Book"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/books/search/findByTitleLike": {
+            "get": {
+                "tags": [
+                    "books",
+                    "search"
+                ],
+                "summary": "Search of Books by approximate title.",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "Title of the Book. Approximate search provided by %. (Example: \"GENERATOR\")",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "title": "ArrayOfBooks",
+                            "type": "array",
+                            "items": {
+                                "title": "Book",
+                                "$ref": "#/definitions/Book"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/books/search/findByDeveloperLike": {
+            "get": {
+                "tags": [
+                    "books",
+                    "search"
+                ],
+                "summary": "Search of Books by developer.",
+                "parameters": [
+                    {
+                        "name": "developer",
+                        "in": "query",
+                        "description": "Developer of the Book. Approximate search provided by %. (Example: \"John %\")",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "title": "ArrayOfBooks",
+                            "type": "array",
+                            "items": {
+                                "title": "Book",
+                                "$ref": "#/definitions/Book"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/books/search/findByOwnerLike": {
+            "get": {
+                "tags": [
+                    "books",
+                    "search"
+                ],
+                "summary": "Search of Books by owner.",
+                "parameters": [
+                    {
+                        "name": "owner",
+                        "in": "query",
+                        "description": "Owner of the Book. Approximate search provided by %. (Example: \"John %\")",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "title": "ArrayOfBooks",
+                            "type": "array",
+                            "items": {
+                                "title": "Book",
+                                "$ref": "#/definitions/Book"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/books/search/findByDescriptionLike": {
+            "get": {
+                "tags": [
+                    "books",
+                    "search"
+                ],
+                "summary": "Search of Books by description.",
+                "parameters": [
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Description of the Book. Approximate search provided by %. (Example: \"Password %\")",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "title": "ArrayOfBooks",
+                            "type": "array",
+                            "items": {
+                                "title": "Book",
+                                "$ref": "#/definitions/Book"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Book": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Title of the Book."
+                },
+                "client": {
+                    "type": "string",
+                    "description": "Client of the Book."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of the Book."
+                },
+                "technicalDetails": {
+                    "type": "string",
+                    "description": "Technical details of the Book."
+                },
+                "owner": {
+                    "type": "string",
+                    "description": "Owner of the Book."
+                },
+                "developer": {
+                    "type": "string",
+                    "description": "Developer of the Book."
+                },
+                "justification": {
+                    "type": "string",
+                    "description": "Business justification for the Book."
+                },
+                "classification": {
+                    "type": "string",
+                    "description": "Classification of the Book."
+                },
+                "output": {
+                    "type": "string",
+                    "description": "Expected output from the Book."
+                },
+                "suggestedProcedure": {
+                    "type": "string",
+                    "description": "Suggested procedure for the Book."
+                },
+                "applicablePlatforms": {
+                    "type": "string",
+                    "description": "Applicable platforms for the Book."
+                },
+                "comments": {
+                    "type": "string",
+                    "description": "Comments for the Book."
+                },
+                "operatingProcedures": {
+                    "type": "string",
+                    "description": "Operating procedures for the Book."
+                },
+                "testCases": {
+                    "type": "string",
+                    "description": "Test cases of the Book."
+                },
+                "appendix": {
+                    "type": "string",
+                    "description": "Appendix of the Book."
+                },
+                "activationStartDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Appendix of the Book."
+                },
+                "activationEndDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Appendix of the Book."
+                },
+                "parameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/BookParameter"
+                    }
+                },
+                "matchers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/BookMatcher"
+                    }
+                }
+            }
+        },
+        "BookParameter": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Title for the parameter"
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Value for the parameter"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "string",
+                        "integer",
+                        "number",
+                        "percentage",
+                        "range",
+                        "date"
+                    ],
+                    "description": "Type of the parameter"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description for the parameter"
+                }
+            }
+        },
+        "BookMatcher": {
+            "type": "object",
+            "properties": {
+                "matcher": {
+                    "type": "string",
+                    "description": "Matcher value"
+                },
+                "field": {
+                    "type": "string",
+                    "description": "Field [note|desc]"
+                }
+            }
+        }
+    }
+}
