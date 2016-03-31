@@ -1,0 +1,6 @@
+- name: Build app
+  hosts: localhost
+  tasks:
+    - name: Build application
+      shell: mvn clean install chdir=~/workspace/books/
+    - shell: java -jar ~/workspace/books/target/books-0.0.1-SNAPSHOT.jar &

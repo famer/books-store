@@ -1,0 +1,12 @@
+- name: Build app
+  hosts: localhost
+  tasks:
+    - name: Build application
+      shell: mvn clean install chdir=~/workspace/books/
+    - shell: ssh mockingbird -L 8082:127.0.0.1:8082 -N -f
+- name: Start app
+  hosts: webservers
+  tasks:
+    - copy: src=~/workspace/books/target/books-0.9.3-SNAPSHOT.jar dest=/data/tomcat//books.jar
+    - name: Run copied file
+      shell: ps -eo args | grep -v grep | grep books -q || java -jar /data/tomcat/books.jar > /dev/null 2>&1 

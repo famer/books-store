@@ -1,0 +1,5 @@
+[webservers]
+mockingbird
+
+[local]
+localhost ansible_connection=local
